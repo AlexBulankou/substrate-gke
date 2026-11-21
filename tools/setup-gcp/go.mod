@@ -64,3 +64,7 @@ require (
 	k8s.io/klog/v2 v2.140.0 // indirect
 	k8s.io/utils v0.0.0-20260626114624-be93311217bd // indirect
 )
+
+require github.com/ai-on-gke/substrate-gke/k8srelease v0.0.0
+
+replace github.com/ai-on-gke/substrate-gke/k8srelease => ../../k8srelease

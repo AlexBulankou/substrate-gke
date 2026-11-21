@@ -28,6 +28,7 @@ import (
 
 	container "cloud.google.com/go/container/apiv1"
 	"cloud.google.com/go/container/apiv1/containerpb"
+	"github.com/ai-on-gke/substrate-gke/k8srelease"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -215,13 +216,10 @@ func nodeSysctlsConfigured(cluster *containerpb.Cluster) bool {
 	return false
 }
 
-// minSupportedMinor is the oldest Kubernetes 1.x minor Agent Substrate is
-// supported on, for the control plane and for every node pool. Node pools are
-// checked because GKE lets them trail the control plane, and a kubelet below
-// 1.37 serves pod certificate projection only behind the beta gate: pods with
-// a pod certificate volume on such a node fail with "MountVolume.SetUp failed:
-// unimplemented".
-const minSupportedMinor = 37
+// minSupportedMinor is the repo-wide floor. The number, and why the floor is
+// where it is, live in k8srelease; it is bound to a local name here because
+// every message below reads it as "1.%d".
+const minSupportedMinor = k8srelease.MinSupportedMinor
 
 // validateClusterVersion rejects a requested version below minSupportedMinor
 // and fills in 1.<minSupportedMinor> when none was requested: left empty, GKE

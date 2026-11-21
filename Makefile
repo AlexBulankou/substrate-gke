@@ -46,8 +46,9 @@ build:
 	cd installer && go build -o ../bin/substrate-gke-installer .
 
 # Go modules in this repository. tools/setup-gcp is its own module so the
-# installer does not pull in the GCP client libraries.
-MODULES := installer tools/setup-gcp
+# installer does not pull in the GCP client libraries; k8srelease is its own
+# module so both of the others can import the version floor.
+MODULES := installer k8srelease tools/setup-gcp
 
 # installer/internal/ui runs for about 9 minutes, close to go test's default
 # 10 minute limit: its wizard walks wait on real cursor-blink and spinner

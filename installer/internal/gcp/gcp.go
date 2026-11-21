@@ -30,6 +30,7 @@ import (
 	"time"
 
 	"github.com/ai-on-gke/substrate-gke/installer/internal/execx"
+	"github.com/ai-on-gke/substrate-gke/k8srelease"
 )
 
 // RequiredBetaAPIs are the Kubernetes beta PodCertificate APIs that setup-gcp's
@@ -49,16 +50,10 @@ var RequiredBetaAPIs = []string{
 	"certificates.k8s.io/v1beta1/clustertrustbundles",
 }
 
-// The oldest release Agent Substrate is supported on, for the control plane
-// and for every node pool. A cluster with either below it is rejected; the
-// remedy is an upgrade.
-//
-// https://docs.cloud.google.com/kubernetes-engine/ai-ml/install-overview-substrate#cluster-requirements
-//
-// Node pools are checked because GKE lets them trail the control plane, and a
-// kubelet below 1.37 serves pod certificate projection only behind the beta
-// gate: Substrate's pods on such a node fail to mount with "unimplemented".
-var MinSupportedRelease = Release{1, 37}
+// MinSupportedRelease is the repo-wide floor, as a Release. The number, and
+// why the floor is where it is, live in k8srelease: this package is under
+// internal/, so setup-gcp cannot import it and used to carry its own copy.
+var MinSupportedRelease = Release{k8srelease.MinSupportedMajor, k8srelease.MinSupportedMinor}
 
 // Release is a Kubernetes minor release, the granularity every line above is
 // drawn at. One value holds both the number the comparisons read and the text
